@@ -1,7 +1,7 @@
 // Create the canvas
 /**
  * Last worked on:
- * ###### Thurs Jan 5 09:06:40 PST 2016
+ * ###### Tue Jan 17 14:06:02 PST 2017
  * By nautknth
  */
 var walkable = [12000,12001,12002,12003,12004,11000,11001,11002,11003,11004,11005,11006];
@@ -2329,111 +2329,7 @@ addEventListener("keydown", function (e) {
                 var theKey = whichKeys[0];//use only the first key
                 kne.inArray(parseInt(theKey),kne.arrayFromTo(65,91)) ? hero.name += String.fromCharCode(theKey): kne.doNothing(); //if the key is between A & Z, ad the letter to the name
             } 
-            /*
-	if (65 in keysDown){
-		hero.name += 'a';
-		stuffNum += 1;
-	}
-	else if (66 in keysDown){
-		hero.name += 'b';
-		stuffNum += 1;
-	}
-	else if (67 in keysDown){
-		hero.name += 'c';
-		stuffNum += 1;
-	}
-	else if (68 in keysDown){
-		hero.name += 'd';
-		stuffNum += 1;
-	}
-	else if (69 in keysDown){
-		hero.name += 'e';
-		stuffNum += 1;
-	}
-	else if (70 in keysDown){
-		hero.name += 'f';
-		stuffNum += 1;
-	}
-	else if (71 in keysDown){
-		hero.name += 'g';
-		stuffNum += 1;
-	}
-	else if (72 in keysDown){
-		hero.name += 'h';
-		stuffNum += 1;
-	}
-	else if (73 in keysDown){
-		hero.name += 'i';
-		stuffNum += 1;
-	}
-	else if (74 in keysDown){
-		hero.name += 'j'
-	}
-	else if (75 in keysDown){
-		hero.name += 'k';
-		stuffNum += 1;
-	}
-	else if (76 in keysDown){
-		hero.name += 'l';
-		stuffNum += 1;
-	}
-	else if (77 in keysDown){
-		hero.name += 'm';
-		stuffNum += 1;
-	}
-	else if (78 in keysDown){
-		hero.name += 'n';
-		stuffNum += 1;
-	}
-	else if (79 in keysDown){
-		hero.name += 'o';
-		stuffNum += 1;
-	}
-	else if (80 in keysDown){
-		hero.name += 'p';
-		stuffNum += 1;
-	}
-	else if (81 in keysDown){
-		hero.name += 'q';
-		stuffNum += 1;
-	}
-	else if (82 in keysDown){
-	hero.name += 'r';
-		stuffNum += 1;
-	}
-	else if (83 in keysDown){
-		hero.name += 's';
-		stuffNum += 1;
-	}
-	else if (84 in keysDown){
-		hero.name += 't';
-		stuffNum += 1;
-	}
-	else if (85 in keysDown){
-		hero.name += 'u';
-		stuffNum += 1;
-	}
-	else if (86 in keysDown){
-		hero.name += 'v';
-		stuffNum += 1;
-	}
-	else if (87 in keysDown){
-		hero.name += 'w';
-		stuffNum += 1;
-	}
-	else if (88 in keysDown){
-		hero.name += 'x';
-		stuffNum += 1;
-	}
-	else if (89 in keysDown){
-		hero.name += 'y';
-		stuffNum += 1;
-	}
-	else if (90 in keysDown){
-		hero.name += 'z';
-		stuffNum += 1;
-	}
-    */
+          
 	else if (13 in keysDown) { //player pressed enter
 		state = 1;
 		hero.name = hero.name;
@@ -2528,7 +2424,7 @@ hero.speed = 600;
 	//var monsterp = new monster(32 + (Math.random() * (430)),32 + (Math.random() * (430)),20*Number(localStorage.caught)/50);
 	//thinglist.push(monsterp);
         } else {
-            hero.name = "player";
+            hero.name = "Player";
         }
     } else {
 	}

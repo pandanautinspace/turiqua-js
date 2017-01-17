@@ -5,3 +5,6 @@ Build your first HTML5 Canvas game in no time! [Read the whole article here.](ht
 * Subscribe to the [Lost Decade Games blog](http://www.lostdecadegames.com/rss.xml)
 * Listen to [Lostcast](http://www.lostdecadegames.com/lostcast/), the indie game dev podcast
 * Follow us [@LostDecadeGames](https://twitter.com/LostDecadeGames)
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Yes, this is based off of the tutorial above...
+Amazing, right?
