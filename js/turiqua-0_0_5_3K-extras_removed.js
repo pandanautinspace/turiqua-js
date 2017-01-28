@@ -1,7 +1,7 @@
 // Create the canvas
 /**
  * Last worked on:
- * ###### Tue Jan 17 14:06:02 PST 2017
+ * ###### Tue Jan 17 15:57:58 PST 2017
  * By nautknth
  */
 var walkable = [12000,12001,12002,12003,12004,11000,11001,11002,11003,11004,11005,11006];
@@ -54,7 +54,7 @@ if (!Object.keys) {
         }
     }
 }
-//quickly generate an array:
+
 
 /**
  * kne is a set of kne's extra stuff which isn't too useful.
@@ -81,7 +81,16 @@ var kne = {
      * @param {Array} array the array to be searched in
      */
     inArray: function (val, array){return array.indexOf(val) == -1 ? false: true;},
-    canvasButton: function(x,y,width,height,onClick){
+	/**
+     * Creates a rectangular button for the canvas, put the button.clickActive in the canvas.onClick function
+     * @param {integer} x x of the button
+     * @param {integer} y y of the button
+	 * @param {integer} width width of the button
+	 * @param {integer} height height of the button
+	 * @param {function} onClick what the button will do when Clicked
+     */
+    canvasRectButton: function(x,y,width,height,onClick){
+		self = this;
         this.x = x;
         this.y = y;
         this.width = width;
@@ -91,12 +100,20 @@ var kne = {
         this.top = this.y;
         this.bot = this.y+this.height;
         this.onClick = onClick;
+		this.clickActive = function(ex,ey){
+			if ((ex >= self.x) && (ex <= self.x + self.width) && (ey >= self.y) && (ey <= self.y + self.height)){
+				onClick();
+			}
+		}
     }
 }
 
+//Initial Menu Buttons:
+
+var StartButton = new kne.canvasRectButton(30,30,20,20, function() {state = 2});
+var ResetButton = new kne.canvasRectButton(30,60,20,20,function() { state = 2})
 
 // LOADING STUFF
-
 //ORCS
 var orc1Ready = false;
 var orc1Image = new Image();
@@ -2162,10 +2179,11 @@ canvas.addEventListener("mousedown", function (e) {
 		flag = 1;
 	}
 	if (state==2 && flag ==0/*&& hero.name != "player"*/){
-		
+		/*
 		state = 1;
 		hero.name = hero.name;
 		ctx.clearRect(0,0,canvas.width,canvas.height);
+		*/
 	}
 	flag = 0;
 	if (ded){
@@ -2549,62 +2567,12 @@ var resets = function () {
 		hero.hp = 100 + (Number(hero.remort)-1) * 10;
 		if (Math.random() * (4)==1){
 				var ngood = true;
-		/*while(ngood){
-			ngood = false;
-			px = Math.round(Math.random()*49);
-			py = Math.round(Math.random()*99);
-			if(map[px][py] == 1){
-				
-				var rx = Math.round(Math.random()*3);
-				var monsterp;
-				switch(rx){
-					case 1: 
-					monsterp = new monster(px*64,py*64,25*Number(localStorage.caught)/50);
-					break;
-					case 2: 
-					monsterp = new monster(px*64 + 32,py*64,25*Number(localStorage.caught)/50);
-					break;
-					case 3: 
-					monsterp = new monster(px*64,py*64 + 32,25*Number(localStorage.caught)/50);
-					break;
-					case 0: 
-					monsterp = new monster(px*64 + 32,py*64 + 32,25*Number(localStorage.caught)/50);
-					break;
-				}
-				//monsterp = new monster(px*64,py*64,0);
-				thinglist.push(monsterp);
-			}else{ngood = false;}
-		}*/
+		
 		
 		}
 	}
 				var ngood = true;
-		/*while(ngood){
-			ngood = false;
-			px = Math.round(Math.random()*49);
-			py = Math.round(Math.random()*99);
-			if(map[px][py] == 1){
-				
-				var rx = Math.round(Math.random()*3);
-				var monsterp;
-				switch(rx){
-					case 1: 
-					monsterp = new monster(px*64,py*64,25*Number(localStorage.caught)/50);
-					break;
-					case 2: 
-					monsterp = new monster(px*64 + 32,py*64,25*Number(localStorage.caught)/50);
-					break;
-					case 3: 
-					monsterp = new monster(px*64,py*64 + 32,25*Number(localStorage.caught)/50);
-					break;
-					case 0: 
-					monsterp = new monster(px*64 + 32,py*64 + 32,25*Number(localStorage.caught)/50);
-					break;
-				}
-				//monsterp = new monster(px*64,py*64,0);
-				thinglist.push(monsterp);
-			}else{ngood = false;}
-		}*/
+		
 	hero.speed = hero.speed;
 	
 };
@@ -2629,18 +2597,7 @@ var update = function (modifier) {
 		}
 	}
 	
-	/*if (65 in keysDown) {
-		//netp=1;
-	}
-	else if (68 in keysDown) {
-		//netp=2;
-	}
-	else if (87 in keysDown) {
-		//netp=3;
-	}
-	else if (83 in keysDown) {
-		//netp=4;	
-	}*/
+	
 	dstop = true;
 	rstop = false;
 	lstop = false;
@@ -2710,57 +2667,7 @@ var update = function (modifier) {
 	}
 
 	
-	/*for(i = 0; i < thinglist.length; i++){
-		if(thinglist[i].name == "monster"){
-			if(map[Math.floor(thinglist[i].x/64)][Math.floor(thinglist[i].y/64)] == 0){
-						var ngood = true;
-		while(ngood){
-			ngood = false;
-			px = Math.round((Math.random()*(2+2))-2)+Math.floor(thinglist[i].x/64);
-			py = Math.round((Math.random()*(2+2))-2)+Math.floor(thinglist[i].y/64);*/
-			/*if(px>712){
-				px = 712;
-			}
-			if(py>500){
-				py = 500;
-				}*/
-			/*if(px<0){
-				px = 0;
-			}
-			if(py<0){
-				py = 0;
-			}
-			if(map[px][py] == 1){
-				
-				var rx = Math.round(Math.random()*3);
-				var monsterp;
-				switch(rx){
-					case 1: 
-					px = px*64;
-					py = py*64;
-					break;
-					case 2: 
-					px = px*64 + 32;
-					py = py*64;
-					break;
-					case 3: 
-					px = px*64;
-					py = py*64 + 32;
-					break;
-					case 0: 
-					px = px*64 + 32;
-					py = py*64 + 32;
-					break;
-				}
-				//monsterp = new monster(px*64,py*64,0);
-				
-			}else{ngood = false;}
-				thinglist[i].x = px;
-				thinglist[i].y = py;
-			}
-		}
-	}
-	}*/
+	
 	
 	for	(var index = 0; index < thinglist.length; index++) {
 			if (thinglist[index].name == "potion"&&
@@ -2771,153 +2678,7 @@ var update = function (modifier) {
 	){
 		thinglist.splice(index,1);
 		localStorage.mihps = Number(localStorage.mihps) + 1;
-	}/*else if (thinglist[index].name == "monster"){
-		var random = Math.floor((Math.random() * 4) + 1);
-		var mflag = 0;
-		switch(netp){
-		case 1:
-		if (
-		hero.x <= (thinglist[index].x + 64)
-		&& thinglist[index].x + 64<= (hero.x + 32)
-		&& hero.y <= (thinglist[index].y + 32)
-		&& thinglist[index].y <= (hero.y + 32)) {
-		var random = Math.floor((Math.random() * 30) + 1);
-		if (random == 1){
-		thinglist.push(new potion(thinglist[index].x,thinglist[index].y));
-		}
-		localStorage.monstersCaught=Number(localStorage.monstersCaught) + 1;
-		localStorage.caught=Number(localStorage.caught) + 1;
-		thinglist.splice(index,1);
-		mflag = 1;
-		resets();
 	}
-		break;
-		
-		case 2:
-		if (
-		hero.x + 64 <= (thinglist[index].x + 32)
-		&& thinglist[index].x <= (hero.x + 64)
-		&& hero.y <= (thinglist[index].y + 32)
-		&& thinglist[index].y <= (hero.y + 32)) {
-		var random = Math.floor((Math.random() * 30) + 1);
-		if (random == 1){
-		thinglist.push(new potion(thinglist[index].x,thinglist[index].y));
-		}	
-		localStorage.monstersCaught=Number(localStorage.monstersCaught) + 1;
-		localStorage.caught=Number(localStorage.caught) + 1;
-		thinglist.splice(index,1);
-		mflag = 1;
-		resets();
-	}
-		break;
-		
-		case 3:
-				if (
-		hero.x <= (thinglist[index].x + 32)
-		&& thinglist[index].x <= (hero.x + 32)
-		&& hero.y - 32  <= (thinglist[index].y + 32)
-		&& thinglist[index].y <= (hero.y - 32)) {
-		var random = Math.floor((Math.random() * 30) + 1);
-		if (random == 1){
-		thinglist.push(new potion(thinglist[index].x,thinglist[index].y));
-		}	
-		localStorage.monstersCaught=Number(localStorage.monstersCaught) + 1;
-		localStorage.caught=Number(localStorage.caught) + 1;
-		thinglist.splice(index,1);
-		mflag = 1;
-		resets();
-	}
-		break;
-		
-		case 4:
-		if (
-		hero.x <= (thinglist[index].x + 32)
-		&& thinglist[index].x <= (hero.x + 32)
-		&& hero.y + 64 <= (thinglist[index].y + 32)
-		&& thinglist[index].y <= (hero.y + 64)) {
-		var random = Math.floor((Math.random() * 30) + 1);
-		if (random == 1){
-		thinglist.push(new potion(thinglist[index].x,thinglist[index].y));
-		}			
-		localStorage.monstersCaught=Number(localStorage.monstersCaught) + 1;
-		localStorage.caught=Number(localStorage.caught) + 1;
-		thinglist.splice(index,1);
-		mflag = 1;
-		resets();
-	}		break;
-	}
-	if(mflag == 0){
-	if (hero.x <= (thinglist[index].x + 32)
-		&& thinglist[index].x <= (hero.x + 32)
-		&& hero.y <= (thinglist[index].y + 32)
-		&& thinglist[index].y <= (hero.y + 32)) {
-		localStorage.hp = localStorage.hp - 5;
-		hurtflag = 1;
-		thinglist.splice(index,1);
-		mflag = 1;
-		resets();
-	}}
-	if(mflag == 0){
-	if (random == 1){
-	if (thinglist[index].x <=3200){
-		if(Math.round((thinglist[index].x + thinglist[index].speed)/64) < 48){
-		if(map[Math.round((thinglist[index].x + thinglist[index].speed)/64)][Math.round(thinglist[index].y/64)] == 0){
-			var lk;
-			for(lk = thinglist[index].x; map[Math.round(lk/64)][Math.floor(thinglist[index].y/64)] == 1; lk++){
-			}
-			thinglist[index].x = lk;
-		}else{
-		thinglist[index].x += thinglist[index].speed;
-		}
-		}
-	}
-	}
-	else if (random == 2){
-	if (thinglist[index].y <=6400){
-		if(Math.round((thinglist[index].y + thinglist[index].speed)/64) < 99){
-		if(map[Math.round((thinglist[index].x)/64)][Math.round(thinglist[index].y + thinglist[index].speed/64)] == 0){
-		var lk;
-			for(lk = thinglist[index].y; map[Math.floor(thinglist[index].x/64)][Math.round(lk/64)] == 1; lk++){
-			}
-			thinglist[index].y = lk;
-		}else{
-		thinglist[index].y += thinglist[index].speed;
-		}
-		}
-	}
-	}
-	else if (random == 3){
-	if (thinglist[index].x >=30){
-		if(Math.round((thinglist[index].x - thinglist[index].speed)/64) > 1){
-		if(map[Math.round((thinglist[index].x - thinglist[index].speed)/64)][Math.round(thinglist[index].y/64)] == 0){
-						var lk;
-			for(lk = thinglist[index].x; map[Math.round(lk/64)][Math.floor(thinglist[index].y/64)] == 1; lk--){
-			}
-			thinglist[index].x = lk;
-		}else{
-		thinglist[index].x -= thinglist[index].speed;
-		}
-
-		}
-	}
-	}
-	else if (random == 4){
-	if (thinglist[index].y >= 50){
-		if(Math.round((thinglist[index].y - thinglist[index].speed)/64) > 1){
-		if(map[Math.round((thinglist[index].x)/64)][Math.round(thinglist[index].y - thinglist[index].speed/64)] == 0){
-					var lk;
-			for(lk = thinglist[index].y; map[Math.floor(thinglist[index].x/64)][Math.round(lk/64)] == 1; lk--){
-			}
-			thinglist[index].y = lk;
-		}else{
-		thinglist[index].y -= thinglist[index].speed;
-		}
-		}
-	}
-		
-	}
-	}
-	}*/ // end of if name is monster
 	
 	
 	}
@@ -3148,42 +2909,7 @@ var render = function () {
 			}
 		}
 	}
-		/*for(var index = 0; index < map.length; index++){
-		for(var jindex = 0; jindex < map[index].length; jindex++){
-
-		if(map[index][jindex] == 1){
-			ctx.drawImage(grass1Image, index * 8 + 0, jindex * 8 + 600,8,8);				
-		}
-		if(map[index][jindex] == 2){
-			ctx.drawImage(grass2Image, index * 8 + 0, jindex * 8 + 600,8,8);				
-		}
-		if(map[index][jindex] == 3){
-			ctx.drawImage(grass3Image, index * 8 + 0, jindex * 8 + 600,8,8);				
-		}
-		if(map[index][jindex] == 4){
-			ctx.drawImage(ruin1Image, index * 8 + 0, jindex * 8 + 600,8,8);				
-		}
-		if(map[index][jindex] == 5){
-			ctx.drawImage(ruin2Image, index * 8 + 0, jindex * 8 + 600,8,8);				
-		}
-		if(map[index][jindex] == 6){
-			ctx.drawImage(ruin3Image, index * 8 + 0, jindex * 8 + 600,8,8);				
-		}
-		if(map[index][jindex] == 7){
-			ctx.drawImage(rfloor1Image, index * 8 + 0, jindex * 8 + 600,8,8);				
-		}
-		if(map[index][jindex] == 8){
-			ctx.drawImage(rfloor2Image, index * 8 + 0, jindex * 8 + 600,8,8);				
-		}
-		if(map[index][jindex] == 9){
-			ctx.drawImage(rfloor3Image, index * 8 + 0, jindex * 8 + 600,8,8);				
-		}
-		if(map[index][jindex] == 0){
-			ctx.drawImage(stoneImage, index * 8 + 0, jindex * 8 + 600,8,8);				
-		}	
-			
-		}
-	}*/
+		
 	if(sword1Ready){
 		for(var i =0;i<bulletlist.length;i++){
 //                        bulletlist[i].x-=herosetx;
@@ -3334,29 +3060,7 @@ var ticon = bulletlist[i].icon;
 		ctx.drawImage(bagImage, 820, 462);
 	}
 	
-	/*if (invReady) {
-		ctx.drawImage(invImage, 630, 30);
-	}
 	
-	if (invReady) {
-		ctx.drawImage(invImage, 630, 100);
-	}
-
-	if (invReady) {
-		ctx.drawImage(invImage, 630, 170);
-	}
-
-	if (invReady) {
-		ctx.drawImage(invImage, 630, 240);
-	}
-
-	if (invReady) {
-		ctx.drawImage(invImage, 630, 310);
-	}
-
-	if (invReady) {
-		ctx.drawImage(invImage, 630, 380);
-	}	*/
 
 	// Score
 
