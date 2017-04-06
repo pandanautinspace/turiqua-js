@@ -1369,21 +1369,21 @@ var trollmbullet = function(bx,by,ex,ey){
 trollmbullet._proto_ = bullet;
 
 var daikrabullet1 = function(bx,by,ex,ey){
-	bullet.call(this,bx,by,ex,ey,50,500);
+	bullet.call(this,bx,by,ex,ey,50,700);
 	this.icon = daikrabullet1Image;
 	this.name = "daikrabullet1";
 	this.damage = 60;
 }
 orcbullet._proto_ = bullet;
 var daikrabullet2 = function(bx,by,ex,ey){
-	bullet.call(this,bx,by,ex,ey,50,500);
+	bullet.call(this,bx,by,ex,ey,50,700);
 	this.icon = daikrabullet2Image;
 	this.name = "daikrabullet2";
 	this.damage = 80;
 }
 daikrabullet2._proto_ = bullet;
 var daikrabullet3 = function(bx,by,ex,ey){
-	bullet.call(this,bx,by,ex,ey,50,500);
+	bullet.call(this,bx,by,ex,ey,50,700);
 	this.icon = daikrabullet3Image;
 	this.name = "daikrabullet3";
 	this.damage = 100;
@@ -1785,7 +1785,13 @@ var player = function(){
 	this.weapon = new avwoodsword(1,1,true);
 	this.armor = new empty();
 	this.dex = 20;
+	this.con = 20;
+	this.str = 20;
+	this.wis = 20;
+	this.inte = 20;
+	this.cha = 20;
 	this.name = 'player';
+	this.inv = [];
 	
 };
 var hero = new player();
@@ -1796,6 +1802,19 @@ function room(x,y,mx,my){
 	this.mx = mx;
 	this.my = my;
 	
+}
+
+function objToString(obj, ndeep) {
+  switch(typeof obj){
+    case "string": return '"'+obj+'"';
+    case "function": return obj.name || obj.toString();
+    case "object":
+      var indent = Array(ndeep||1).join('\t'), isArray = Array.isArray(obj);
+      return ('{['[+isArray] + Object.keys(obj).map(function(key){
+           return '\n\t' + indent +(isArray?'': key + ': ' )+ objToString(obj[key], (ndeep||1)+1);
+         }).join(',') + '\n' + indent + '}]'[+isArray]).replace(/[\s\t\n]+(?=(?:[^\'"]*[\'"][^\'"]*[\'"])*[^\'"]*$)/g,'');
+    default: return obj.toString();
+  }
 }
 
 var spawn = function(px,py,spawnlist){
@@ -2492,7 +2511,7 @@ canvas.addEventListener("mousedown", function (e) {
 				bulletlist.push(new bullet(hero.x+16,hero.y+16,hero.x+canvas_x-herosetx,hero.y+canvas_y-herosety,1000,30));
 				buldelay = 0;
 					for	(var index = 0; index < realthinglist.length; index++) {
-		if(inv.length < 17 && realthinglist[index].ininv == false && clickedx > realthinglist[index].x && clickedx < realthinglist[index].x+32 && clickedy > realthinglist[index].y && clickedy < realthinglist[index].y+32){
+		if(hero.inv.length < 17 && realthinglist[index].ininv == false && clickedx > realthinglist[index].x && clickedx < realthinglist[index].x+32 && clickedy > realthinglist[index].y && clickedy < realthinglist[index].y+32){
 			/*inv.push(realthinglist[index]);
 			realthinglist[index].ininv = true;*/
 		}		
@@ -2528,54 +2547,54 @@ canvas.addEventListener("mousedown", function (e) {
 			try{
 			if(atshop&&gold>((shopscav.inv[shopvalue].price + shopscav.inv[shopvalue].price*shopscav.inv[shopvalue].tohit*shopscav.inv[shopvalue].todam+10*shopscav.inv[shopvalue].ex)* 1.3)&&!selcweapon&&!selcarmor&&shopscav.inv[shopvalue].id == "weapon"&&canvas_x>50&&canvas_x<150&&canvas_y>390&&canvas_y<420){
 				gold -= ((shopscav.inv[shopvalue].price + shopscav.inv[shopvalue].price*shopscav.inv[shopvalue].tohit*shopscav.inv[shopvalue].todam+10*shopscav.inv[shopvalue].ex)* 1.3);
-				inv.push(shopscav.inv[shopvalue]);
+				hero.inv.push(shopscav.inv[shopvalue]);
 				shopscav.inv.splice(shopvalue,1);
 			}
 			else if(atshop&&(gold > ((shopscav.inv[shopvalue].price + shopscav.inv[shopvalue].price*shopscav.inv[shopvalue].plusac+10*shopscav.inv[shopvalue].ex)*1.3))&&!selcweapon&&!selcarmor&&shopscav.inv[shopvalue].id == "armor"&&canvas_x>50&&canvas_x<150&&canvas_y>390&&canvas_y<420){
 				gold -= ((shopscav.inv[shopvalue].price + shopscav.inv[shopvalue].price*shopscav.inv[shopvalue].plusac+10*shopscav.inv[shopvalue].ex)*1.3);
-				inv.push(shopscav.inv[shopvalue]);
+				hero.inv.push(shopscav.inv[shopvalue]);
 				shopscav.inv.splice(shopvalue,1);
 				
 			}
 				else if(atshop&&(gold > ((shopscav.inv[shopvalue].price)*1.3))&&!selcweapon&&!selcarmor&&shopscav.inv[shopvalue].id == "potion"&&canvas_x>50&&canvas_x<150&&canvas_y>390&&canvas_y<420){
 				gold -= ((shopscav.inv[shopvalue].price)*1.3);
-				inv.push(shopscav.inv[shopvalue]);
+				hero.inv.push(shopscav.inv[shopvalue]);
 				shopscav.inv.splice(shopvalue,1);
 				
 			}
-			if(atinv&&!selcweapon&&!selcarmor&&inv[invvalue].id == "weapon"&&canvas_x>50&&canvas_x<150&&canvas_y>390&&canvas_y<420){
-				gold += inv[invvalue].price + inv[invvalue].price*inv[invvalue].tohit*inv[invvalue].todam+10*inv[invvalue].ex
-				inv.splice(invvalue,1);
+			if(atinv&&!selcweapon&&!selcarmor&&hero.inv[invvalue].id == "weapon"&&canvas_x>50&&canvas_x<150&&canvas_y>390&&canvas_y<420){
+				gold += hero.inv[invvalue].price + hero.inv[invvalue].price*hero.inv[invvalue].tohit*hero.inv[invvalue].todam+10*hero.inv[invvalue].ex
+				hero.inv.splice(invvalue,1);
 			}
-			else if(atinv&&!selcweapon&&!selcarmor&&inv[invvalue].id == "armor"&&canvas_x>50&&canvas_x<150&&canvas_y>390&&canvas_y<420){
-				gold += (inv[invvalue].price + inv[invvalue].price*inv[invvalue].plusac+10*inv[invvalue].ex)
-				inv.splice(invvalue,1);
+			else if(atinv&&!selcweapon&&!selcarmor&&hero.inv[invvalue].id == "armor"&&canvas_x>50&&canvas_x<150&&canvas_y>390&&canvas_y<420){
+				gold += (hero.inv[invvalue].price + hero.inv[invvalue].price*hero.inv[invvalue].plusac+10*hero.inv[invvalue].ex)
+				hero.inv.splice(invvalue,1);
 			}
-			else if(atinv&&!selcweapon&&!selcarmor&&inv[invvalue].id == "potion"&&canvas_x>50&&canvas_x<150&&canvas_y>390&&canvas_y<420){
-				gold += (inv[invvalue].price)
-				inv.splice(invvalue,1);
+			else if(atinv&&!selcweapon&&!selcarmor&&hero.inv[invvalue].id == "potion"&&canvas_x>50&&canvas_x<150&&canvas_y>390&&canvas_y<420){
+				gold += (hero.inv[invvalue].price)
+				hero.inv.splice(invvalue,1);
 			}
-			if(atinv&&!selcarmor&&!selcweapon&&inv[invvalue].id == "weapon"&&canvas_x>50&&canvas_x<100&&canvas_y>430&&canvas_y<460){
-				var proxinv = inv[invvalue];
-				inv[invvalue] = hero.weapon;
+			if(atinv&&!selcarmor&&!selcweapon&&hero.inv[invvalue].id == "weapon"&&canvas_x>50&&canvas_x<100&&canvas_y>430&&canvas_y<460){
+				var proxinv = hero.inv[invvalue];
+				hero.inv[invvalue] = hero.weapon;
 				hero.weapon = proxinv;
 
 			}	
-			if(atinv&&!selcarmor&&!selcweapon&&inv[invvalue].id == "armor"&&canvas_x>50&&canvas_x<100&&canvas_y>430&&canvas_y<460){
-				var proxinv = inv[invvalue];
+			if(atinv&&!selcarmor&&!selcweapon&&hero.inv[invvalue].id == "armor"&&canvas_x>50&&canvas_x<100&&canvas_y>430&&canvas_y<460){
+				var proxinv = hero.inv[invvalue];
 				if(hero.armor.id == "delete"){
-					inv.splice(invvalue,1);
+					hero.inv.splice(invvalue,1);
 					}else{
-				inv[invvalue] = hero.armor;
+				hero.inv[invvalue] = hero.armor;
 				}
 				hero.armor = proxinv;
 
 			}	
-			if(atinv&&!selcarmor&&!selcweapon&&inv[invvalue].id == "potion"&&canvas_x>50&&canvas_x<100&&canvas_y>430&&canvas_y<460){
-				if(inv[invvalue].name == 'Health Potion' || inv[invvalue].name == 'Big Health Potion'){
-				hero.hp = inv[invvalue].use(hero.hp,maxhp);
+			if(atinv&&!selcarmor&&!selcweapon&&hero.inv[invvalue].id == "potion"&&canvas_x>50&&canvas_x<100&&canvas_y>430&&canvas_y<460){
+				if(hero.inv[invvalue].name == 'Health Potion' || hero.inv[invvalue].name == 'Big Health Potion'){
+				hero.hp = hero.inv[invvalue].use(hero.hp,maxhp);
 			}
-			inv.splice(invvalue,1);
+			hero.inv.splice(invvalue,1);
 			}	
 			}
 			catch(ex){}
@@ -2620,6 +2639,77 @@ canvas.addEventListener("dblclick", function (e) {
 	}
 }, false);
 var scavdelay = 100000000;
+addEventListener("keydown", function (e) {
+	keysDown[e.keyCode] = true;
+    var whichKeys = Object.keys(keysDown);
+	if(81 in keysDown && state == 1){
+			if(atinv){
+				atinv = false;
+				selcweapon = false;
+			}
+			else{
+				atinv = true;
+				atshop = false;
+			}
+			
+	}
+    if (state == 2) {
+		console.log(hero.name);
+        console.log(whichKeys);
+		if (stuffNum == 0 && hero.name.length <= 7){//making sure multiple keys won't be pressed in a row, name < 7
+            if (16 in keysDown){
+                whichKeys.splice(whichKeys.indexOf("16"), 1);//take off the shift key from the list
+                var theKey = whichKeys[0];//use only the first key
+                kne.inArray(parseInt(theKey),kne.arrayFromTo(65,91)) ? hero.name += String.fromCharCode(theKey): kne.doNothing(); //if the key is between A & Z, ad the letter to the name
+            } 
+          
+	else if (13 in keysDown) { //player pressed enter
+		state = 1;
+		hero.name = hero.name;
+		
+	}
+    else{
+				var theKey = parseInt(whichKeys[0])+32;
+                kne.inArray(parseInt(theKey),kne.arrayFromTo(97,123)) ? hero.name += String.fromCharCode(theKey): kne.doNothing();
+            }
+
+	}
+	if (stuffNum == 0 && state==2){
+	if (8 in keysDown){
+		hero.name = hero.name.slice(0,-1)
+		stuffNum += 1;
+	}
+	}
+	
+            e.preventDefault();
+            console.log(e.keyCode);
+
+        }
+
+}, false);
+var response;
+function loadUser(str) {
+    if (str == "") {
+        document.getElementById("txtHint").innerHTML = "";
+        return;
+    } else { 
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                response = this.responseText;
+            }
+        };
+        xmlhttp.open("GET","getuser.php?q="+str,true);
+        xmlhttp.send();
+    }
+}
+/*
 addEventListener("keydown", function (e) {
 	keysDown[e.keyCode] = true;
     var whichKeys = Object.keys(keysDown);
@@ -2754,7 +2844,7 @@ addEventListener("keydown", function (e) {
 		hero.name += 'z';
 		stuffNum += 1;
 	}
-    */
+    *//*
 	else if (13 in keysDown) { //player pressed enter
 		state = 1;
 		hero.name = hero.name;
@@ -2777,7 +2867,7 @@ addEventListener("keydown", function (e) {
             console.log(e.keyCode);
 
         }
-}, false);
+}, false);*/
 
 addEventListener("keyup", function (e) {
 	delete keysDown[e.keyCode];
@@ -3090,7 +3180,7 @@ var update = function (modifier) {
 		if (32 in keysDown){
 		for	(var index = 0; index < scavengerlist.length; index++) {
 			if(scavdelay>100 && ((hero.x > scavengerlist[index].x && hero.x < scavengerlist[index].x+32 && hero.y > scavengerlist[index].y && hero.y < scavengerlist[index].y+32)||(hero.x > scavengerlist[index].x && hero.x < scavengerlist[index].x+32 && hero.y+32 > scavengerlist[index].y && hero.y+32 < scavengerlist[index].y+32)||(hero.x+32 > scavengerlist[index].x && hero.x+32 < scavengerlist[index].x+32 && hero.y+32 > scavengerlist[index].y && hero.y+32 < scavengerlist[index].y+32)||(hero.x+32 > scavengerlist[index].x && hero.x+32 < scavengerlist[index].x+32 && hero.y+32 > scavengerlist[index].y && hero.y < scavengerlist[index].y))){
-				if(inv.length < 16){
+				if(hero.inv.length < 16){
 					shopscav = scavengerlist[index];
 					atshop = true;
 				}
@@ -3101,8 +3191,8 @@ var update = function (modifier) {
 		}
 		for	(var index = 0; index < realthinglist.length; index++) {
 			if(realthinglist[index].ininv == false && ((hero.x > realthinglist[index].x && hero.x < realthinglist[index].x+32 && hero.y > realthinglist[index].y && hero.y < realthinglist[index].y+32)||(hero.x > realthinglist[index].x && hero.x < realthinglist[index].x+32 && hero.y+32 > realthinglist[index].y && hero.y+32 < realthinglist[index].y+32)||(hero.x+32 > realthinglist[index].x && hero.x+32 < realthinglist[index].x+32 && hero.y+32 > realthinglist[index].y && hero.y+32 < realthinglist[index].y+32)||(hero.x+32 > realthinglist[index].x && hero.x+32 < realthinglist[index].x+32 && hero.y+32 > realthinglist[index].y && hero.y < realthinglist[index].y))){
-				if(inv.length < 16){
-					inv.push(realthinglist[index]);
+				if(hero.inv.length < 16){
+					hero.inv.push(realthinglist[index]);
 					realthinglist.splice(index,1);
 				}
 				else{
@@ -3758,9 +3848,9 @@ var ticon = bulletlist[i].icon;
 		ctx.drawImage(monsterImage, 805, 190);
 	}
 	
-/*	if (mihpReady) {
+	if (mihpReady) {
 		ctx.drawImage(mihpImage, 805, 240);
-	}*/
+	}
 	if (coinReady) {
 		ctx.drawImage(coinImage, 805, 290);
 	}	
@@ -3831,6 +3921,7 @@ var ticon = bulletlist[i].icon;
 	ctx.font = "25px VT323";
 	maxhp = 100 + (Number(hero.remort)-1)*10;
 	ctx.fillText(hero.name.toUpperCase(), 805, 50);
+	ctx.fillText("Constitution:"+hero.con, 805, 100);
 	ctx.textAlign = "right";
 	ctx.textBaseline = "top";
 	ctx.fillStyle = "#000000";
@@ -3942,23 +4033,23 @@ else if(!selcarmor&&!selcweapon&&shopscav.inv[shopvalue].id == "potion"){
 		ctx.textAlign = "left";
 	try{
 
-		for(var iterinv = 0; iterinv < inv.length; iterinv++){
-			ctx.drawImage(inv[iterinv].icon, 298+((iterinv)%4)*80, 147+(Math.floor((iterinv)/4))*80,64,64);
+		for(var iterinv = 0; iterinv < hero.inv.length; iterinv++){
+			ctx.drawImage(hero.inv[iterinv].icon, 298+((iterinv)%4)*80, 147+(Math.floor((iterinv)/4))*80,64,64);
 		}
 		
-		if(!selcarmor && !selcweapon&inv[invvalue].id == "weapon"){
-			ctx.drawImage(inv[invvalue].icon,150,156,64,64);
+		if(!selcarmor && !selcweapon&hero.inv[invvalue].id == "weapon"){
+			ctx.drawImage(hero.inv[invvalue].icon,150,156,64,64);
 			ctx.fillStyle = "#ffffff";
 			ctx.font = "30px VT323";
 			ctx.textAlign = "left";
-			if(inv[invvalue].ex == 1){
-				ctx.fillText(inv[invvalue].name + " of " + inv[invvalue].brand,50,220);
+			if(hero.inv[invvalue].ex == 1){
+				ctx.fillText(hero.inv[invvalue].name + " of " + hero.inv[invvalue].brand,50,220);
 			}
 			else{
-				ctx.fillText(inv[invvalue].name,50,220);
+				ctx.fillText(hero.inv[invvalue].name,50,220);
 			}
-			ctx.fillText("(+"+inv[invvalue].tohit+",+"+inv[invvalue].todam+")",50,250)
-			ctx.fillText("Sell("+(inv[invvalue].price + inv[invvalue].price*inv[invvalue].tohit*inv[invvalue].todam+10*inv[invvalue].ex)+"gp)",50,390);
+			ctx.fillText("(+"+hero.inv[invvalue].tohit+",+"+hero.inv[invvalue].todam+")",50,250)
+			ctx.fillText("Sell("+(hero.inv[invvalue].price + hero.inv[invvalue].price*hero.inv[invvalue].tohit*hero.inv[invvalue].todam+10*hero.inv[invvalue].ex)+"gp)",50,390);
 			ctx.fillText("Wear",50,430);
 		}
 		else if(selcweapon){
@@ -3975,38 +4066,38 @@ else if(!selcarmor&&!selcweapon&&shopscav.inv[shopvalue].id == "potion"){
 			}
 			ctx.fillText("(+"+hero.weapon.tohit+",+"+hero.weapon.todam+")",50,250)
 		}
-		else if(!selcarmor&&!selcweapon&&inv[invvalue].id == "armor"){
-			ctx.drawImage(inv[invvalue].icon,150,156,64,64);
+		else if(!selcarmor&&!selcweapon&&hero.inv[invvalue].id == "armor"){
+			ctx.drawImage(hero.inv[invvalue].icon,150,156,64,64);
 			ctx.fillStyle = "#ffffff";
 			ctx.font = "30px VT323";
 			ctx.textAlign = "left";
-		if(inv[invvalue].ex == 1){
-			ctx.fillText(inv[invvalue].name + " of " + inv[invvalue].brand,50,220);
+		if(hero.inv[invvalue].ex == 1){
+			ctx.fillText(hero.inv[invvalue].name + " of " + hero.inv[invvalue].brand,50,220);
 		}
 		else{
-			ctx.fillText(inv[invvalue].name,50,220);
+			ctx.fillText(hero.inv[invvalue].name,50,220);
 		}
-			if(inv[invvalue].plusac == 0){
-				ctx.fillText("["+inv[invvalue].ac+"]",50,250);
+			if(hero.inv[invvalue].plusac == 0){
+				ctx.fillText("["+hero.inv[invvalue].ac+"]",50,250);
 			}
-			else if(inv[invvalue].plusac > 0){
-				ctx.fillText("["+inv[invvalue].ac+",+"+inv[invvalue].plusac+"]",50,250)
+			else if(hero.inv[invvalue].plusac > 0){
+				ctx.fillText("["+hero.inv[invvalue].ac+",+"+hero.inv[invvalue].plusac+"]",50,250)
 			}
-			ctx.fillText("Sell("+(inv[invvalue].price + inv[invvalue].price*inv[invvalue].plusac+10*inv[invvalue].ex)+"gp)",50,390);
+			ctx.fillText("Sell("+(hero.inv[invvalue].price + hero.inv[invvalue].price*hero.inv[invvalue].plusac+10*hero.inv[invvalue].ex)+"gp)",50,390);
 			ctx.fillText("Wear",50,430);
 		}
-		else if(!selcarmor&&!selcweapon&&inv[invvalue].id == "potion"){
-			ctx.drawImage(inv[invvalue].icon,150,156,64,64);
+		else if(!selcarmor&&!selcweapon&&hero.inv[invvalue].id == "potion"){
+			ctx.drawImage(hero.inv[invvalue].icon,150,156,64,64);
 			ctx.fillStyle = "#ffffff";
 			ctx.font = "30px VT323";
 			ctx.textAlign = "left";
-		if(inv[invvalue].ex == 1){
-			ctx.fillText(inv[invvalue].name + " of " + inv[invvalue].brand,50,220);
+		if(hero.inv[invvalue].ex == 1){
+			ctx.fillText(hero.inv[invvalue].name + " of " + hero.inv[invvalue].brand,50,220);
 		}
 		else{
-			ctx.fillText(inv[invvalue].name,50,220);
+			ctx.fillText(hero.inv[invvalue].name,50,220);
 		}
-			ctx.fillText("Sell("+(inv[invvalue].price)+"gp)",50,390);
+			ctx.fillText("Sell("+(hero.inv[invvalue].price)+"gp)",50,390);
 			ctx.fillText("Use",50,430);
 		}
 		else if(selcarmor){
@@ -4040,8 +4131,13 @@ else if(!selcarmor&&!selcweapon&&shopscav.inv[shopvalue].id == "potion"){
 var renderx = function () {
 	ctx.fillStyle="#558000";
 	ctx.drawImage(TitleImage,0,0);
+	try{
 	ctx.drawImage(cursor, canvas_x-24, canvas_y-24);
-};
+	}
+	catch(ex){
+		
+	}
+	};
 var renderN = function() {
 	if (nameReady) {
         ctx.drawImage(nameImage,0, 0);
