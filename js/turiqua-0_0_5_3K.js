@@ -14,7 +14,7 @@ var dstop = false;
 var atinv = false;
 var invvalue = 0;
 var ded = false;
-
+var autofire = false;
 var selcarmor = false;
 var realthinglist = [];
 var herosetx = 450;
@@ -400,6 +400,24 @@ sword30Image.onload = function () {
 	sword30Ready = true;
 };
 sword30Image.src = "images/sword_29.png";
+var sword31Ready = false;
+var sword31Image = new Image();
+sword31Image.onload = function () {
+	sword31Ready = true;
+};
+sword31Image.src = "images/sword_30.png";
+var sword32Ready = false;
+var sword32Image = new Image();
+sword32Image.onload = function () {
+	sword32Ready = true;
+};
+sword32Image.src = "images/sword_31.png";
+var sword33Ready = false;
+var sword33Image = new Image();
+sword33Image.onload = function () {
+	sword33Ready = true;
+};
+sword33Image.src = "images/sword_32.png";
 
 
 //ARMOR
@@ -693,40 +711,40 @@ var grass0Image = new Image();
 grass0Image.onload = function () {
 	grass0Ready = true;
 };
-grass0Image.src = "images/grass_0.png";
+grass0Image.src = "images/grass2_0.png";
 // Grass image
 var grass1Ready = false;
 var grass1Image = new Image();
 grass1Image.onload = function () {
 	grass1Ready = true;
 };
-grass1Image.src = "images/grass_1.png";
+grass1Image.src = "images/grass2_1.png";
 // Grass image
 var grass2Ready = false;
 var grass2Image = new Image();
 grass2Image.onload = function () {
 	grass2Ready = true;
 };
-grass2Image.src = "images/grass_2.png";
+grass2Image.src = "images/grass2_2.png";
 // Grass image
 var grass3Ready = false;
 var grass3Image = new Image();
 grass3Image.onload = function () {
 	grass3Ready = true;
 };
-grass3Image.src = "images/grass_3.png";
+grass3Image.src = "images/grass2_3.png";
 var grass4Ready = false;
 var grass4Image = new Image();
 grass4Image.onload = function () {
 	grass4Ready = true;
 };
-grass4Image.src = "images/grass_4.png";
+grass4Image.src = "images/grass2_4.png";
 var grass5Ready = false;
 var grass5Image = new Image();
 grass5Image.onload = function () {
 	grass5Ready = true;
 };
-grass5Image.src = "images/grass_5.png";
+grass5Image.src = "images/grass2_5.png";
 
 var ruin1Ready = false;
 var ruin1Image = new Image();
@@ -969,9 +987,11 @@ function thing(x,y,ininv){
 	this.dex = 0;
 	this.str = 0;
 	this.wis = 0;
-	this.intel = 0;
-	this.charis = 0;
+	this.inte = 0;
+	this.cha = 0;
+	this.spd = 0;
 	this.plusac = 0;
+	this.stat = 0;
 }
 
 //POTIONS
@@ -982,7 +1002,36 @@ function realpotion(x,y,ininv){
 }
 realpotion._proto_ = thing;
 realpotion.prototype.use = function(){};
-
+function conpotion(x,y,ininv){
+	realpotion.call(this,x,y,ininv);
+	this.price = 25000;
+	this.use = function(){
+		hero.con += 5;
+	}
+	this.name = 'Constitution Potion';
+	this.icon = potion3Image;
+}
+conpotion._proto_ = realpotion;
+function dexpotion(x,y,ininv){
+	realpotion.call(this,x,y,ininv);
+	this.price = 25000;
+	this.use = function(){
+		hero.dex += 5;
+	}
+	this.name = 'Dexterity Potion';
+	this.icon = potion5Image;
+}
+dexpotion._proto_ = realpotion;
+function strpotion(x,y,ininv){
+	realpotion.call(this,x,y,ininv);
+	this.price = 25000;
+	this.use = function(){
+		hero.str += 5;
+	}
+	this.name = 'Strength Potion';
+	this.icon = potion4Image;
+}
+strpotion._proto_ = realpotion;
 function hppotion(x,y,ininv){
 	realpotion.call(this,x,y,ininv);
 	this.price = 100;
@@ -1056,26 +1105,32 @@ goodleatherarmor._proto_ = avleatherarmor;
 
 function exleatherarmor(x,y,ininv){
 	goodleatherarmor.call(this,x,y,ininv);
-	var randbrand = (Math.floor(Math.random() * (5-1)+1));
+var randbrand = (Math.floor(Math.random() * (5-1)+1));
+this.ex = (Math.floor(Math.random() * (6)+1))*(Math.floor(Math.random() * (hero.remort-1+2)+1));
+this.stat = this.ex;
 	switch(randbrand){
 		
 		case 1:
-		this.brand = 'ice';
+		this.brand = 'Constitution';
+		this.con = this.ex;
 		break;
 		case 2:
-		this.brand = 'fire';
+		this.brand = 'Dexterity';
+		this.dex = this.ex;
 		break;
 		case 3:
-		this.brand = 'lightning';
+		this.brand = 'Strength';
+		this.str = this.ex;
 		break;
 		case 4:
-		this.brand = 'acid';
+		this.brand = 'Speed';
+		this.spd = this.ex*10;
+		this.ex = this.ex*10;
 		break;
 		default:
 		this.brand = 'fire';
 		
 	}
-	this.ex = 1;
 	this.icon = armor3Image;
 }
 exleatherarmor._proto_ = goodleatherarmor;
@@ -1098,26 +1153,32 @@ goodstdleatherarmor._proto_ = avstdleatherarmor;
 
 function exstdleatherarmor(x,y,ininv){
 	goodstdleatherarmor.call(this,x,y,ininv);
-	var randbrand = (Math.floor(Math.random() * (5-1)+1));
+var randbrand = (Math.floor(Math.random() * (5-1)+1));
+this.ex = (Math.floor(Math.random() * (6)+1))*(Math.floor(Math.random() * (hero.remort-1+2)+1));
+this.stat = this.ex;
 	switch(randbrand){
 		
 		case 1:
-		this.brand = 'ice';
+		this.brand = 'Constitution';
+		this.con = this.ex;
 		break;
 		case 2:
-		this.brand = 'fire';
+		this.brand = 'Dexterity';
+		this.dex = this.ex;
 		break;
 		case 3:
-		this.brand = 'lightning';
+		this.brand = 'Strength';
+		this.str = this.ex;
 		break;
 		case 4:
-		this.brand = 'acid';
+		this.brand = 'Speed';
+		this.spd = this.ex*10;
+		this.ex = this.ex*10;
 		break;
 		default:
 		this.brand = 'fire';
 		
 	}
-	this.ex = 1;
 	this.icon = armor6Image;
 }
 exstdleatherarmor._proto_ = goodstdleatherarmor;
@@ -1127,40 +1188,47 @@ function avmailarmor(x,y,ininv){
 	this.name = "Mail Armor";
 	this.ac = 12;
 	this.price = 1000;
-	this.icon = armor7Image;
+	this.icon = armor10Image;
 }
 avmailarmor._proto_ = armor;
 
 function goodmailarmor(x,y,ininv){
 	avmailarmor.call(this,x,y,ininv);
 	this.plusac = (Math.floor(Math.random() * (6)+1))*(Math.floor(Math.random() * (hero.remort-1+2)+1));
-	this.icon = armor8Image;
+	this.icon = armor11Image;
 }
 goodmailarmor._proto_ = avmailarmor;
 
 function exmailarmor(x,y,ininv){
 	goodmailarmor.call(this,x,y,ininv);
-	var randbrand = (Math.floor(Math.random() * (5-1)+1));
+var randbrand = (Math.floor(Math.random() * (5-1)+1));
+this.ex = (Math.floor(Math.random() * (6)+1))*(Math.floor(Math.random() * (hero.remort-1+2)+1));
+this.stat = this.ex;
 	switch(randbrand){
 		
 		case 1:
-		this.brand = 'ice';
+		this.brand = 'Constitution';
+		this.con = this.ex;
 		break;
 		case 2:
-		this.brand = 'fire';
+		this.brand = 'Dexterity';
+		this.dex = this.ex;
 		break;
 		case 3:
-		this.brand = 'lightning';
+		this.brand = 'Strength';
+		this.str = this.ex;
 		break;
 		case 4:
-		this.brand = 'acid';
+		this.brand = 'Speed';
+		this.spd = this.ex*10;
+		this.ex = this.ex*10;
 		break;
 		default:
 		this.brand = 'fire';
 		
 	}
-	this.ex = 1;
-	this.icon = armor9Image;
+
+	this.icon = armor12Image;
 }
 exmailarmor._proto_ = goodmailarmor;
 //WEAPON
@@ -1194,27 +1262,33 @@ function exwoodsword(x,y,ininv){
 	goodwoodsword.call(this,x,y,ininv);
 	this.brand;
 	
-	var randbrand = (Math.floor(Math.random() * (5-1)+1));
+var randbrand = (Math.floor(Math.random() * (5-1)+1));
+this.ex = (Math.floor(Math.random() * (6)+1))*(Math.floor(Math.random() * (hero.remort-1+2)+1));
+this.stat = this.ex;
 	switch(randbrand){
 		
 		case 1:
-		this.brand = 'ice';
+		this.brand = 'Constitution';
+		this.con = this.ex;
 		break;
 		case 2:
-		this.brand = 'fire';
+		this.brand = 'Dexterity';
+		this.dex = this.ex;
 		break;
 		case 3:
-		this.brand = 'lightning';
+		this.brand = 'Strength';
+		this.str = this.ex;
 		break;
 		case 4:
-		this.brand = 'acid';
+		this.brand = 'Speed';
+		this.spd = this.ex*10;
+		this.ex = this.ex*10;
 		break;
 		default:
 		this.brand = 'fire';
 		
 	}
 	this.icon = sword3Image;
-	this.ex = 1;
 	//console.log(this.ex);
 }
 exwoodsword._proto_ = goodwoodsword;
@@ -1239,37 +1313,95 @@ function exshortsword(x,y,ininv){
 	goodshortsword.call(this,x,y,ininv);
 	this.brand;
 	
-	var randbrand = (Math.floor(Math.random() * (5-1)+1));
+var randbrand = (Math.floor(Math.random() * (5-1)+1));
+this.ex = (Math.floor(Math.random() * (6)+1))*(Math.floor(Math.random() * (hero.remort-1+2)+1));
+this.stat = this.ex;
 	switch(randbrand){
 		
 		case 1:
-		this.brand = 'ice';
+		this.brand = 'Constitution';
+		this.con = this.ex;
 		break;
 		case 2:
-		this.brand = 'fire';
+		this.brand = 'Dexterity';
+		this.dex = this.ex;
 		break;
 		case 3:
-		this.brand = 'lightning';
+		this.brand = 'Strength';
+		this.str = this.ex;
 		break;
 		case 4:
-		this.brand = 'acid';
+		this.brand = 'Speed';
+		this.spd = this.ex*10;
+		this.ex = this.ex*10;
 		break;
 		default:
 		this.brand = 'fire';
 		
 	}
 	this.icon = sword6Image;
-	this.ex = 1;
 	//console.log(this.ex);
 }
 exshortsword._proto_ = goodshortsword;
 
-function avdemonsword(x,y,ininv){
+function avgoldsword(x,y,ininv){
 	weapon.call(this,x,y,ininv,20);
 	this.price = 500;
+	this.icon = sword31Image;
+	this.name = "Gold Sword"
+	this.damage = 30;
+}
+avgoldsword._proto_ = weapon;
+
+function goodgoldsword(x,y,ininv){
+	avgoldsword.call(this,x,y,ininv);
+
+	this.tohit = (Math.floor(Math.random() * (6)+1))*(Math.floor(Math.random() * (hero.remort-1+2)+1));
+	this.todam = (Math.floor(Math.random() * (6)+1))*(Math.floor(Math.random() * (hero.remort-1+2)+1));
+	this.icon = sword32Image;
+}
+goodgoldsword._proto_ = avgoldsword;
+function exgoldsword(x,y,ininv){
+	goodgoldsword.call(this,x,y,ininv);
+	this.brand;
+	
+var randbrand = (Math.floor(Math.random() * (5-1)+1));
+this.ex = (Math.floor(Math.random() * (6)+1))*(Math.floor(Math.random() * (hero.remort-1+2)+1));
+this.stat = this.ex;
+	switch(randbrand){
+		
+		case 1:
+		this.brand = 'Constitution';
+		this.con = this.ex;
+		break;
+		case 2:
+		this.brand = 'Dexterity';
+		this.dex = this.ex;
+		break;
+		case 3:
+		this.brand = 'Strength';
+		this.str = this.ex;
+		break;
+		case 4:
+		this.brand = 'Speed';
+		this.spd = this.ex*10;
+		this.ex = this.ex*10;
+		break;
+		default:
+		this.brand = 'fire';
+		
+	}
+	this.icon = sword33Image;
+	//console.log(this.ex);
+}
+exgoldsword._proto_ = goodgoldsword;
+
+function avdemonsword(x,y,ininv){
+	weapon.call(this,x,y,ininv,20);
+	this.price = 2000;
 	this.icon = sword7Image;
 	this.name = "Demon Sword"
-	this.damage = 30;
+	this.damage = 100;
 }
 avdemonsword._proto_ = weapon;
 
@@ -1285,31 +1417,36 @@ function exdemonsword(x,y,ininv){
 	gooddemonsword.call(this,x,y,ininv);
 	this.brand;
 	
-	var randbrand = (Math.floor(Math.random() * (5-1)+1));
+var randbrand = (Math.floor(Math.random() * (5-1)+1));
+this.ex = (Math.floor(Math.random() * (6)+1))*(Math.floor(Math.random() * (hero.remort-1+2)+1));
+this.stat = this.ex;
 	switch(randbrand){
 		
 		case 1:
-		this.brand = 'ice';
+		this.brand = 'Constitution';
+		this.con = this.ex;
 		break;
 		case 2:
-		this.brand = 'fire';
+		this.brand = 'Dexterity';
+		this.dex = this.ex;
 		break;
 		case 3:
-		this.brand = 'lightning';
+		this.brand = 'Strength';
+		this.str = this.ex;
 		break;
 		case 4:
-		this.brand = 'acid';
+		this.brand = 'Speed';
+		this.spd = this.ex*10;
+		this.ex = this.ex*10;
 		break;
 		default:
 		this.brand = 'fire';
 		
 	}
 	this.icon = sword9Image;
-	this.ex = 1;
 	//console.log(this.ex);
 }
 exdemonsword._proto_ = gooddemonsword;
-
 
 
 var bullet = function(bx,by,ex,ey,spd,life){
@@ -1429,13 +1566,13 @@ function loottable(a){
 		this.artable.push(new exstdleatherarmor(this.x,this.y,true));
 	}
 	for(var iterlt = 0; iterlt < a[12]; iterlt++){
-		this.artable.push(new avdemonsword(this.x,this.y,true));
+		this.artable.push(new avgoldsword(this.x,this.y,true));
 	}
 	for(var iterlt = 0; iterlt < a[13]; iterlt++){
-		this.artable.push(new gooddemonsword(this.x,this.y,true));
+		this.artable.push(new goodgoldsword(this.x,this.y,true));
 	}
 	for(var iterlt = 0; iterlt < a[14]; iterlt++){
-		this.artable.push(new exdemonsword(this.x,this.y,true));
+		this.artable.push(new exgoldsword(this.x,this.y,true));
 	}
 	for(var iterlt = 0; iterlt < a[15]; iterlt++){
 		this.artable.push(new avmailarmor(this.x,this.y,true));
@@ -1452,6 +1589,15 @@ function loottable(a){
 	for(var iterlt = 0; iterlt < a[19]; iterlt++){
 		this.artable.push(new bighppotion(this.x,this.y,true));
 	}
+	for(var iterlt = 0; iterlt < a[20]; iterlt++){
+		this.artable.push(new strpotion(this.x,this.y,true));
+	}
+	for(var iterlt = 0; iterlt < a[21]; iterlt++){
+		this.artable.push(new conpotion(this.x,this.y,true));
+	}
+	for(var iterlt = 0; iterlt < a[22]; iterlt++){
+		this.artable.push(new dexpotion(this.x,this.y,true));
+	}
 	}
 
 function scavenger(x,y,things){
@@ -1464,7 +1610,7 @@ function scavenger(x,y,things){
 	this.loot;
 	this.makeinv = function(){
 		console.log('making inv');
-		this.posloot = [5,3,1,5,3,1,5,3,1,5,3,1,5,3,1,5,3,1,3,3]
+		this.posloot = [5,3,1,5,3,1,5,3,1,5,3,1,5,3,1,5,3,1,3,3,3,3,3]
 		this.loottbl = new loottable(this.posloot);
 		this.loot = this.loottbl.artable;
 		for(var sc = 0; sc < this.inv.length; sc++){
@@ -1508,7 +1654,7 @@ function monster(x,y,hp,speed){
 	this.range = 500;
 	this.name = "monster";
 	this.shootdelay = 0;
-	this.posloot = [5,3,1,5,3,1,0,0,0,0,0,0,0,0,0,0,0,0,3,3];
+	this.posloot = [5,3,1,5,3,1,0,0,0,0,0,0,0,0,0,0,0,0,3,3,1,1,1];
 	this.loottbl = new loottable(this.posloot);
 	this.loot = this.loottbl.artable;
 	this.shoot = function(){};
@@ -1551,7 +1697,7 @@ function monster(x,y,hp,speed){
 };
 function orccaptain(x,y){
 	monster.call(this,x,y,200,300);
-	this.posloot = [0,0,0,0,0,0,5,3,1,5,3,1,0,0,0,0,0,0,3,3];
+	this.posloot = [0,0,0,0,0,0,5,3,1,5,3,1,0,0,0,0,0,0,3,3,1,1,1];
 	this.loottbl = new loottable(this.posloot);
 	this.loot = this.loottbl.artable;
 	this.name = "orccaptain";
@@ -1571,7 +1717,7 @@ function orccaptain(x,y){
 orccaptain._proto_ = monster;
 function orcwarrior(x,y){
 	monster.call(this,x,y,100,300);
-	this.posloot = [5,3,1,5,3,1,0,0,0,0,0,0,0,0,0,0,0,0,3,3];
+	this.posloot = [5,3,1,5,3,1,0,0,0,0,0,0,0,0,0,0,0,0,2,2,1,1,1];
 	this.loottbl = new loottable(this.posloot);
 	this.loot = this.loottbl.artable;
 	this.icon = orc2Image;
@@ -1592,7 +1738,7 @@ orcwarrior._proto_ = monster;
 function orcmage(x,y){
 monster.call(this,x,y,50,100);
 this.icon = orc3Image;
-	this.posloot = [5,3,1,5,3,1,0,0,0,0,0,0,0,0,0,0,0,0,3,3];
+	this.posloot = [5,3,1,5,3,1,0,0,0,0,0,0,0,0,0,0,0,0,2,2,1,1,1];
 	this.loottbl = new loottable(this.posloot);
 	this.loot = this.loottbl.artable;
 	this.name = "orcmage";
@@ -1609,9 +1755,9 @@ this.icon = orc3Image;
 orcmage._proto_ = monster;
 
 function trollcaptain(x,y){
-	monster.call(this,x,y,2000,300);
+	monster.call(this,x,y,20000,300);
 	this.icon = troll1Image;
-	this.posloot = [0,0,0,0,0,0,0,0,0,0,0,0,5,3,1,5,3,1,3,3];
+	this.posloot = [0,0,0,0,0,0,0,0,0,0,0,0,5,3,1,5,3,1,2,2,1,1,1];
 	this.loottbl = new loottable(this.posloot);
 	this.loot = this.loottbl.artable;
 	this.name = "trollcaptain";
@@ -1629,10 +1775,10 @@ function trollcaptain(x,y){
 };
 trollcaptain._proto_ = monster;
 function trollwarrior(x,y){
-	monster.call(this,x,y,1000,300);
+	monster.call(this,x,y,10000,300);
 	this.name = "trollwarrior";
 	this.icon = troll2Image;
-	this.posloot = [0,0,0,0,0,0,5,3,1,5,3,1,0,0,0,0,0,0,3,3];
+	this.posloot = [0,0,0,0,0,0,5,3,1,5,3,1,5,3,1,5,3,1,1,1,1,1,1];
 	this.loottbl = new loottable(this.posloot);
 	this.loot = this.loottbl.artable;
 	this.shootdelay = 0;
@@ -1649,10 +1795,10 @@ function trollwarrior(x,y){
 trollwarrior._proto_ = monster;
 
 function trollmage(x,y){
-monster.call(this,x,y,500,100);
+monster.call(this,x,y,5000,100);
 	this.name = "trollmage";
 	this.icon = troll3Image;
-	this.posloot = [0,0,0,0,0,0,5,3,1,5,3,1,0,0,0,0,0,0,3,3];
+	this.posloot = [0,0,0,0,0,0,5,3,1,5,3,1,5,3,1,5,3,1,1,1,1,1,1];
 	this.loottbl = new loottable(this.posloot);
 	this.loot = this.loottbl.artable;
 	this.shootdelay = 0;
@@ -1686,7 +1832,7 @@ goblin._proto_ = monster;
 function daikra(x,y){
 monster.call(this,x,y,500,20);
 this.icon = daikra1Image;
-	this.posloot = [0,0,0,0,0,0,0,0,0,0,0,0,3,2,1,3,2,1,2,2];
+	this.posloot = [0,0,0,0,0,0,0,0,0,0,0,0,3,2,1,3,2,1,2,2,1,1,1];
 	this.loottbl = new loottable(this.posloot);
 	this.loot = this.loottbl.artable;
 	this.name = "daikra";
@@ -1713,7 +1859,7 @@ daikra._proto_ = monster;
 function daikracaptain(x,y){
 monster.call(this,x,y,500,200);
 this.icon = daikra2Image;
-	this.posloot = [0,0,0,0,0,0,0,0,0,0,0,0,1,2,3,1,2,3,1,1];
+	this.posloot = [0,0,0,0,0,0,0,0,0,0,0,0,1,2,3,1,2,3,1,1,1,1,1];
 	this.loottbl = new loottable(this.posloot);
 	this.loot = this.loottbl.artable;
 	this.name = "daikracaptain";
@@ -1740,7 +1886,7 @@ daikracaptain._proto_ = monster;
 function daikramaster(x,y){
 monster.call(this,x,y,500,400);
 this.icon = daikra3Image;
-	this.posloot = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,5,0,0];
+	this.posloot = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,5,0,0,1,1,1];
 	this.loottbl = new loottable(this.posloot);
 	this.loot = this.loottbl.artable;
 	this.name = "daikramaster";
@@ -2480,7 +2626,7 @@ canvas.addEventListener("mousedown", function (e) {
 		else if(canvas_x >= 815 && canvas_x <=847 && canvas_y >= 240 && canvas_y <= 272 ){
 		if(Number(localStorage.mihps) != 0){
 		localStorage.mihps = Number(localStorage.mihps) - 1;
-		if(Number(hero.hp)+50 < maxhp){
+		if(Number(hero.hp)+50 < (maxhp*(hero.con + hero.armor.con +hero.weapon.con)/20)){
 		hero.hp = Number(hero.hp) + 50
 		}
 		else{
@@ -2546,12 +2692,12 @@ canvas.addEventListener("mousedown", function (e) {
 
 			try{
 			if(atshop&&gold>((shopscav.inv[shopvalue].price + shopscav.inv[shopvalue].price*shopscav.inv[shopvalue].tohit*shopscav.inv[shopvalue].todam+10*shopscav.inv[shopvalue].ex)* 1.3)&&!selcweapon&&!selcarmor&&shopscav.inv[shopvalue].id == "weapon"&&canvas_x>50&&canvas_x<150&&canvas_y>390&&canvas_y<420){
-				gold -= ((shopscav.inv[shopvalue].price + shopscav.inv[shopvalue].price*shopscav.inv[shopvalue].tohit*shopscav.inv[shopvalue].todam+10*shopscav.inv[shopvalue].ex)* 1.3);
+				gold -= ((shopscav.inv[shopvalue].price + shopscav.inv[shopvalue].price*shopscav.inv[shopvalue].tohit*shopscav.inv[shopvalue].todam+10*shopscav.inv[shopvalue].stat)* 1.3);
 				hero.inv.push(shopscav.inv[shopvalue]);
 				shopscav.inv.splice(shopvalue,1);
 			}
 			else if(atshop&&(gold > ((shopscav.inv[shopvalue].price + shopscav.inv[shopvalue].price*shopscav.inv[shopvalue].plusac+10*shopscav.inv[shopvalue].ex)*1.3))&&!selcweapon&&!selcarmor&&shopscav.inv[shopvalue].id == "armor"&&canvas_x>50&&canvas_x<150&&canvas_y>390&&canvas_y<420){
-				gold -= ((shopscav.inv[shopvalue].price + shopscav.inv[shopvalue].price*shopscav.inv[shopvalue].plusac+10*shopscav.inv[shopvalue].ex)*1.3);
+				gold -= ((shopscav.inv[shopvalue].price + shopscav.inv[shopvalue].price*shopscav.inv[shopvalue].plusac+10*shopscav.inv[shopvalue].stat)*1.3);
 				hero.inv.push(shopscav.inv[shopvalue]);
 				shopscav.inv.splice(shopvalue,1);
 				
@@ -2563,11 +2709,11 @@ canvas.addEventListener("mousedown", function (e) {
 				
 			}
 			if(atinv&&!selcweapon&&!selcarmor&&hero.inv[invvalue].id == "weapon"&&canvas_x>50&&canvas_x<150&&canvas_y>390&&canvas_y<420){
-				gold += hero.inv[invvalue].price + hero.inv[invvalue].price*hero.inv[invvalue].tohit*hero.inv[invvalue].todam+10*hero.inv[invvalue].ex
+				gold += hero.inv[invvalue].price + hero.inv[invvalue].price*hero.inv[invvalue].tohit*hero.inv[invvalue].todam+1000*hero.inv[invvalue].stat;
 				hero.inv.splice(invvalue,1);
 			}
 			else if(atinv&&!selcweapon&&!selcarmor&&hero.inv[invvalue].id == "armor"&&canvas_x>50&&canvas_x<150&&canvas_y>390&&canvas_y<420){
-				gold += (hero.inv[invvalue].price + hero.inv[invvalue].price*hero.inv[invvalue].plusac+10*hero.inv[invvalue].ex)
+				gold += (hero.inv[invvalue].price + hero.inv[invvalue].price*hero.inv[invvalue].plusac+1000*hero.inv[invvalue].stat);
 				hero.inv.splice(invvalue,1);
 			}
 			else if(atinv&&!selcweapon&&!selcarmor&&hero.inv[invvalue].id == "potion"&&canvas_x>50&&canvas_x<150&&canvas_y>390&&canvas_y<420){
@@ -2580,7 +2726,7 @@ canvas.addEventListener("mousedown", function (e) {
 				hero.weapon = proxinv;
 
 			}	
-			if(atinv&&!selcarmor&&!selcweapon&&hero.inv[invvalue].id == "armor"&&canvas_x>50&&canvas_x<100&&canvas_y>430&&canvas_y<460){
+			else if(atinv&&!selcarmor&&!selcweapon&&hero.inv[invvalue].id == "armor"&&canvas_x>50&&canvas_x<100&&canvas_y>430&&canvas_y<460){
 				var proxinv = hero.inv[invvalue];
 				if(hero.armor.id == "delete"){
 					hero.inv.splice(invvalue,1);
@@ -2590,9 +2736,12 @@ canvas.addEventListener("mousedown", function (e) {
 				hero.armor = proxinv;
 
 			}	
-			if(atinv&&!selcarmor&&!selcweapon&&hero.inv[invvalue].id == "potion"&&canvas_x>50&&canvas_x<100&&canvas_y>430&&canvas_y<460){
+			else if(atinv&&!selcarmor&&!selcweapon&&hero.inv[invvalue].id == "potion"&&canvas_x>50&&canvas_x<100&&canvas_y>430&&canvas_y<460){
 				if(hero.inv[invvalue].name == 'Health Potion' || hero.inv[invvalue].name == 'Big Health Potion'){
-				hero.hp = hero.inv[invvalue].use(hero.hp,maxhp);
+				hero.hp = hero.inv[invvalue].use(hero.hp,(maxhp*(hero.con+hero.armor.con+hero.weapon.con)));
+			}
+			else{
+				hero.inv[invvalue].use();
 			}
 			hero.inv.splice(invvalue,1);
 			}	
@@ -3147,7 +3296,7 @@ var update = function (modifier) {
 		
 	if (Number(hero.exp)>1900){
 		hero.remort = Number(hero.remort) + 1;
-		hero.hp = 100 + Number(hero.remort) * 10;
+		hero.hp = (100 + Number(hero.remort) * 10)*(hero.con+hero.weapon.con+hero.armor.con)/20;
 		hero.exp = 0;
 	}
 	if (Number(hero.hp) <= 0){
@@ -3201,22 +3350,22 @@ var update = function (modifier) {
 			}		
 		}
 	}
-	if (69 in keysDown) { // Player press e
-		if(hpcode == 60 && Number(localStorage.mihps) != 0){
-		localStorage.mihps = Number(localStorage.mihps) - 1;
-		if(Number(hero.hp)+50 < maxhp){
-		hero.hp = Number(hero.hp) + 50;
+	if (73 in keysDown) { // Player press i
+		if(hpcode == 60){
+		
+		if(autofire == false){
+		autofire = true;
 		}
 		else{
-			hero.hp = maxhp;
+			autofire = false;
 		}
 		hpcode = 0;
 		}
-		hpcode++;
+		
 	}
 	if (87 in keysDown) { // Player holding up
 		if (walkable.indexOf(map[Math.floor(hero.x/64)][Math.floor((hero.y-5)/64)]) != -1){
-		hero.y -= 2*hero.speed/3 * modifier;		
+		hero.y -= 2*(hero.speed + hero.weapon.spd + hero.armor.spd)/3 * modifier;		
 		}
 		dstop = false;
 		rstop = false;
@@ -3226,7 +3375,7 @@ var update = function (modifier) {
 	}
 	if (83 in keysDown) { // Player holding down
 		if (walkable.indexOf(map[Math.floor(hero.x/64)][Math.floor((hero.y+35)/64)]) != -1){
-		hero.y += 2*hero.speed/3 * modifier;
+		hero.y += 2*(hero.speed + hero.weapon.spd + hero.armor.spd)/3 * modifier;
 		}
 		dstop = true;
 		rstop = false;
@@ -3235,7 +3384,7 @@ var update = function (modifier) {
 	}
 	if (65 in keysDown) { // Player holding left
 	 	if (walkable.indexOf(map[Math.floor((hero.x-5)/64)][Math.floor((hero.y+5)/64)]) != -1){
-		hero.x -= 2*hero.speed/3 * modifier;
+		hero.x -= 2*(hero.speed + hero.weapon.spd + hero.armor.spd)/3 * modifier;
 		}
 		dstop = false;
 		rstop = false;
@@ -3244,7 +3393,7 @@ var update = function (modifier) {
 	}
 	if (68 in keysDown) { // Player holding right
 		if (walkable.indexOf(map[Math.floor((hero.x+35)/64)][Math.floor((hero.y+5)/64)]) != -1){
-		hero.x += 2*hero.speed/3 * modifier;
+		hero.x += 2*(hero.speed + hero.weapon.spd + hero.armor.spd)/3 * modifier;
 		}
 		dstop = false;
 		rstop = true;
@@ -3466,9 +3615,9 @@ var update = function (modifier) {
 	}
 	
 	//new bullets
-	if(dragflag == 1){
-		buldelay += (hero.weapon.tohit/10)+1;
-		if(buldelay>((hero.dex/2))){
+	if(dragflag == 1 || autofire == true){
+		buldelay += ((hero.weapon.tohit/10)+1)*(1+(hero.weapon.stat+hero.armor.stat)*0.05);
+		if(buldelay>(((200/(hero.dex + hero.armor.dex + hero.weapon.dex))))){
 						var xdifference = herosetx - hero.x;
 			var ydifference = herosety - hero.y;
 			if(state==1 && canvas_x <=900){
@@ -3552,11 +3701,11 @@ var update = function (modifier) {
 		}*/
 	}
 	if (bulletalive&&bulletlist[i].name !== "bullet"&&bulletlist[i].x<hero.x+32&&bulletlist[i].x>hero.x&&bulletlist[i].y<hero.y+32&&bulletlist[i].y>hero.y){
-		if((bulletlist[i].damage+0.6*(Number(hero.remort)-1)-(hero.armor.ac+hero.armor.plusac)) < (bulletlist[i].damage+0.6*(Number(hero.remort)-1))*0.1){
-			hero.hp -=(bulletlist[i].damage+0.6*(Number(hero.remort)-1))*0.1;
+		if((bulletlist[i].damage-(hero.armor.ac+hero.armor.plusac)) < (bulletlist[i].damage+0.6*(Number(hero.remort)-1))*0.1){
+			hero.hp -=(bulletlist[i].damage*0.1);
 		}
 		else{
-			hero.hp -=bulletlist[i].damage+0.6*(Number(hero.remort)-1)-(hero.armor.ac+hero.armor.plusac);
+			hero.hp -=bulletlist[i].damage-(hero.armor.ac+hero.armor.plusac);
 		}
 		bulletlist.splice(i,1);
 		bulletalive = false;
@@ -3564,7 +3713,7 @@ var update = function (modifier) {
 		for	(var index = 0; index < monsterlist.length; index++) {
 			
 			if (bulletalive&&bulletlist[i].name == "bullet"&&bulletlist[i].x<monsterlist[index].x+32&&bulletlist[i].x>monsterlist[index].x&&bulletlist[i].y<monsterlist[index].y+32&&bulletlist[i].y>monsterlist[index].y){
-				monsterlist[index].hp -= hero.weapon.damage+hero.weapon.damage*hero.weapon.todam/10+monsterlist[index].hp*hero.weapon.ex/10;
+				monsterlist[index].hp -= (hero.weapon.damage+hero.weapon.damage*hero.weapon.todam/10*(1+(hero.weapon.stat)*0.05))*(hero.str + hero.armor.str + hero.weapon.str)/20;
 				bulletlist.splice(i,1);
 				bulletalive = false;
 				//console.log(monsterlist[index].hp);
@@ -3915,26 +4064,39 @@ var ticon = bulletlist[i].icon;
 	ctx.fillRect(805,100,90,30);
 	ctx.fillStyle="#00cc00";
     
-	ctx.fillRect(805,100,(Math.floor(hero.hp)/maxhp)*90,30);
+	ctx.fillRect(805,100,(Math.floor(hero.hp)/(maxhp*(hero.con+hero.armor.con+hero.weapon.con)/20))*90,30);
 	ctx.fillStyle = "rgb(250, 250, 250)";
 	ctx.font = "20px Arial";
 	ctx.font = "25px VT323";
 	maxhp = 100 + (Number(hero.remort)-1)*10;
 	ctx.fillText(hero.name.toUpperCase(), 805, 50);
-	ctx.fillText("Constitution:"+hero.con, 805, 100);
+	var plchldr;
+	plchldr = hero.weapon.con + hero.armor.con;
+	ctx.fillText("Constitution:"+hero.con + "+(" + plchldr + ")", 905, 250);
+	plchldr = hero.weapon.str + hero.armor.str;
+	ctx.fillText("Strength:"+hero.str + "+(" + plchldr + ")", 905, 300);
+	plchldr = hero.weapon.dex + hero.armor.dex;
+	ctx.fillText("Dexterity:"+hero.dex + "+(" + plchldr + ")", 905, 350);
+	plchldr = hero.weapon.wis + hero.armor.wis;
+	ctx.fillText("Wisdom:"+hero.wis + "+(" + plchldr + ")", 905, 400);
+	plchldr = hero.weapon.inte + hero.armor.inte;
+	ctx.fillText("Intelligence:"+hero.inte + "+(" + plchldr + ")", 905, 450);
+	plchldr = hero.weapon.cha + hero.armor.cha;
+	ctx.fillText("Charisma:"+hero.cha + "+(" + plchldr + ")", 905, 500);
 	ctx.textAlign = "right";
 	ctx.textBaseline = "top";
 	ctx.fillStyle = "#000000";
 	ctx.font = "20px Arial";
 	ctx.font = "25px VT323";
 	ctx.fillText("" + hero.remort, 440, 0);
-	ctx.fillText("" + hero.speed, 900, 160);
+	plchldr = hero.weapon.spd + hero.armor.spd;
+	ctx.fillText("" + hero.speed + "+(" + plchldr + ")", 900, 160);
 	ctx.fillText("" + localStorage.monstersCaught, 900, 210);
 	//ctx.fillText("" + localStorage.mihps, 880, 250);
 	ctx.fillText("" + gold + "gp", 900, 290);
 	ctx.font = "10px Arial";
 	ctx.font = "15px VT323";
-	ctx.fillText(Math.floor(hero.hp) + "/" + maxhp, 870, 110);
+	ctx.fillText(Math.floor(hero.hp) + "/" + (maxhp*(hero.con+hero.weapon.con+hero.armor.con)/20), 870, 110);
 	ctx.fillStyle = "#FF0000";
 	ctx.font = "100px VT323";
 	if(ded){
@@ -3969,14 +4131,14 @@ var ticon = bulletlist[i].icon;
 			ctx.fillStyle = "#ffffff";
 			ctx.font = "30px VT323";
 			ctx.textAlign = "left";
-			if(shopscav.inv[shopvalue].ex == 1){
-				ctx.fillText(shopscav.inv[shopvalue].name + " of " + shopscav.inv[shopvalue].brand,50,220);
+			if(shopscav.inv[shopvalue].ex > 0){
+				ctx.fillText(shopscav.inv[shopvalue].name + " of " + shopscav.inv[shopvalue].brand + "(" + shopscav.inv[shopvalue].ex + ")",50,220);
 			}
 			else{
 				ctx.fillText(shopscav.inv[shopvalue].name,50,220);
 			}
 			ctx.fillText("(+"+shopscav.inv[shopvalue].tohit+",+"+shopscav.inv[shopvalue].todam+")",50,250)
-			ctx.fillText("Buy("+((shopscav.inv[shopvalue].price + shopscav.inv[shopvalue].price*shopscav.inv[shopvalue].tohit*shopscav.inv[shopvalue].todam+10*shopscav.inv[shopvalue].ex)* 1.3)+"gp)",50,390);
+			ctx.fillText("Buy("+((shopscav.inv[shopvalue].price + shopscav.inv[shopvalue].price*shopscav.inv[shopvalue].tohit*shopscav.inv[shopvalue].todam+1000*shopscav.inv[shopvalue].stat)* 1.3)+"gp)",50,390);
 
 		}
 		else if(!selcarmor&&!selcweapon&&shopscav.inv[shopvalue].id == "armor"){
@@ -3984,8 +4146,8 @@ var ticon = bulletlist[i].icon;
 			ctx.fillStyle = "#ffffff";
 			ctx.font = "30px VT323";
 			ctx.textAlign = "left";
-		if(shopscav.inv[shopvalue].ex == 1){
-			ctx.fillText(shopscav.inv[shopvalue].name + " of " + shopscav.inv[shopvalue].brand,50,220);
+		if(shopscav.inv[shopvalue].ex >0){
+			ctx.fillText(shopscav.inv[shopvalue].name + " of " + shopscav.inv[shopvalue].brand + "(" + shopscav.inv[shopvalue].ex + ")",50,220);
 		}
 		else{
 			ctx.fillText(shopscav.inv[shopvalue].name,50,220);
@@ -3996,15 +4158,15 @@ var ticon = bulletlist[i].icon;
 			else if(shopscav.inv[shopvalue].plusac > 0){
 				ctx.fillText("["+shopscav.inv[shopvalue].ac+",+"+shopscav.inv[shopvalue].plusac+"]",50,250)
 			}
-			ctx.fillText("Buy("+((shopscav.inv[shopvalue].price + shopscav.inv[shopvalue].price*shopscav.inv[shopvalue].plusac+10*shopscav.inv[shopvalue].ex)*1.3)+"gp)",50,390);
+			ctx.fillText("Buy("+((shopscav.inv[shopvalue].price + shopscav.inv[shopvalue].price*shopscav.inv[shopvalue].plusac+1000*shopscav.inv[shopvalue].stat)*1.3)+"gp)",50,390);
 			}
 else if(!selcarmor&&!selcweapon&&shopscav.inv[shopvalue].id == "potion"){
 			ctx.drawImage(shopscav.inv[shopvalue].icon,150,156,64,64);
 			ctx.fillStyle = "#ffffff";
 			ctx.font = "30px VT323";
 			ctx.textAlign = "left";
-		if(shopscav.inv[shopvalue].ex == 1){
-			ctx.fillText(shopscav.inv[shopvalue].name + " of " + shopscav.inv[shopvalue].brand,50,220);
+		if(shopscav.inv[shopvalue].ex > 0){
+			ctx.fillText(shopscav.inv[shopvalue].name + " of " + shopscav.inv[shopvalue].brand + "(" + shopscav.inv[shopvalue].ex + ")",50,220);
 		}
 		else{
 			ctx.fillText(shopscav.inv[shopvalue].name,50,220);
@@ -4042,14 +4204,14 @@ else if(!selcarmor&&!selcweapon&&shopscav.inv[shopvalue].id == "potion"){
 			ctx.fillStyle = "#ffffff";
 			ctx.font = "30px VT323";
 			ctx.textAlign = "left";
-			if(hero.inv[invvalue].ex == 1){
-				ctx.fillText(hero.inv[invvalue].name + " of " + hero.inv[invvalue].brand,50,220);
+			if(hero.inv[invvalue].ex > 0){
+				ctx.fillText(hero.inv[invvalue].name + " of " + hero.inv[invvalue].brand + "(" + hero.inv[invvalue].ex + ")",50,220);
 			}
 			else{
 				ctx.fillText(hero.inv[invvalue].name,50,220);
 			}
 			ctx.fillText("(+"+hero.inv[invvalue].tohit+",+"+hero.inv[invvalue].todam+")",50,250)
-			ctx.fillText("Sell("+(hero.inv[invvalue].price + hero.inv[invvalue].price*hero.inv[invvalue].tohit*hero.inv[invvalue].todam+10*hero.inv[invvalue].ex)+"gp)",50,390);
+			ctx.fillText("Sell("+(hero.inv[invvalue].price + hero.inv[invvalue].price*hero.inv[invvalue].tohit*hero.inv[invvalue].todam+1000*hero.inv[invvalue].ex)+"gp)",50,390);
 			ctx.fillText("Wear",50,430);
 		}
 		else if(selcweapon){
@@ -4057,8 +4219,8 @@ else if(!selcarmor&&!selcweapon&&shopscav.inv[shopvalue].id == "potion"){
 			ctx.fillStyle = "#ffffff";
 			ctx.font = "30px VT323";
 			ctx.textAlign = "left";
-			if(hero.weapon.ex == 1){
-				ctx.fillText(hero.weapon.name + " of " + hero.weapon.brand,50,220);
+			if(hero.weapon.ex > 0){
+				ctx.fillText(hero.weapon.name + " of " + hero.weapon.brand + "(" + hero.inv[invvalue].ex + ")",50,220);
 			}
 			else{
 				ctx.fillText(hero.weapon.name,50,220);
@@ -4071,8 +4233,8 @@ else if(!selcarmor&&!selcweapon&&shopscav.inv[shopvalue].id == "potion"){
 			ctx.fillStyle = "#ffffff";
 			ctx.font = "30px VT323";
 			ctx.textAlign = "left";
-		if(hero.inv[invvalue].ex == 1){
-			ctx.fillText(hero.inv[invvalue].name + " of " + hero.inv[invvalue].brand,50,220);
+		if(hero.inv[invvalue].ex > 0){
+			ctx.fillText(hero.inv[invvalue].name + " of " + hero.inv[invvalue].brand + "(" + hero.inv[invvalue].ex + ")",50,220);
 		}
 		else{
 			ctx.fillText(hero.inv[invvalue].name,50,220);
@@ -4083,7 +4245,7 @@ else if(!selcarmor&&!selcweapon&&shopscav.inv[shopvalue].id == "potion"){
 			else if(hero.inv[invvalue].plusac > 0){
 				ctx.fillText("["+hero.inv[invvalue].ac+",+"+hero.inv[invvalue].plusac+"]",50,250)
 			}
-			ctx.fillText("Sell("+(hero.inv[invvalue].price + hero.inv[invvalue].price*hero.inv[invvalue].plusac+10*hero.inv[invvalue].ex)+"gp)",50,390);
+			ctx.fillText("Sell("+(hero.inv[invvalue].price + hero.inv[invvalue].price*hero.inv[invvalue].plusac+1000*hero.inv[invvalue].stat)+"gp)",50,390);
 			ctx.fillText("Wear",50,430);
 		}
 		else if(!selcarmor&&!selcweapon&&hero.inv[invvalue].id == "potion"){
@@ -4091,8 +4253,8 @@ else if(!selcarmor&&!selcweapon&&shopscav.inv[shopvalue].id == "potion"){
 			ctx.fillStyle = "#ffffff";
 			ctx.font = "30px VT323";
 			ctx.textAlign = "left";
-		if(hero.inv[invvalue].ex == 1){
-			ctx.fillText(hero.inv[invvalue].name + " of " + hero.inv[invvalue].brand,50,220);
+		if(hero.inv[invvalue].ex > 0){
+			ctx.fillText(hero.inv[invvalue].name + " of " + hero.inv[invvalue].brand + "(" + hero.inv[invvalue].ex + ")",50,220);
 		}
 		else{
 			ctx.fillText(hero.inv[invvalue].name,50,220);
@@ -4105,8 +4267,8 @@ else if(!selcarmor&&!selcweapon&&shopscav.inv[shopvalue].id == "potion"){
 		ctx.fillStyle = "#ffffff";
 		ctx.font = "30px VT323";
 		ctx.textAlign = "left";
-		if(hero.armor.ex == 1){
-			ctx.fillText(hero.armor.name + " of " + hero.armor.brand,50,220);
+		if(hero.armor.ex > 0){
+			ctx.fillText(hero.armor.name + " of " + hero.armor.brand + "(" + hero.armor.ex + ")",50,220);
 		}
 		else{
 		ctx.fillText(hero.armor.name,50,220);
